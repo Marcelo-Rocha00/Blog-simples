@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form  method ='POST'>
+            {% csrf_token %}
+            <input type="text" name='nome' placeholder="nome de usuario" required >
+            <input type="password" name='password' placeholder="Sua senha" required>
+            <label>
+                <input type="checkbox"> Manter-me logado
+            </label>
+            <button type="submit">Logar</button>
+        </form>
+        <div class="register-link">
+            Ainda não tem conta? <a href="{% url 'cadastro' %}">Cadastre-se</a> <br>
+            {% comment %} esqueceu a senha? <a href="{% url 'reset_password' %}">clique aqui</a> {% endcomment %}
+        </div>
+    </div>
+</body>
+</html>
