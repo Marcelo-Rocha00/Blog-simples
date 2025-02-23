@@ -2,7 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate,  login as auth_login, logout
 from django.contrib import messages
 from .forms import UsuarioForm
+from .serilalizers import UsuarioSerializer
+from rest_framework import viewsets
+from .models import Usuario
 # Create your views here.
+
+class UsuarioViewset(viewsets.ModelViewSet): #faz uma busca pelos dados do usuario e lista eles na API
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+
 
 def cadastro(request):
     if request.method == 'POST':
