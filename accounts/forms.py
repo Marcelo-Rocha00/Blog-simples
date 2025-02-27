@@ -1,20 +1,23 @@
 from django import forms
-from .models import Usuario
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
-class UsuarioForm(forms.ModelForm):
-    senha = forms.CharField(widget=forms.PasswordInput, max_length=128, required=True,label='Senha')
-    confirmar_senha = forms.CharField(widget=forms.PasswordInput,max_length=128,required=True,label='Confirmar Senha')
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
     class Meta:
-        model = Usuario
-        fields = ['nome','email', 'telefone',]
-        
-        
-        def clean(self):
-            cleaned_data = super().clean()
-            senha = cleaned_data.get('senha')
-            confirmar_senha = cleaned_data.get('confirmar_senha')
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
 
-            if senha != confirmar_senha:
-                raise forms.ValidationError('As senhas não coincidem.')
-            
-            return cleaned_data
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+
+        if commit:
+            user.save()
+        
+        return user

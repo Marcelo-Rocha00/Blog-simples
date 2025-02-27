@@ -95,11 +95,7 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="nome">Nome <span>*</span></label>
-                <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
-            </div>
-            <div class="form-group">
-                <label for="telefone">Telefone <span>*</span></label>
-                <input type="text" id="telefone" name="telefone" placeholder="(DDD) Telefone" required>
+                <input type="text" id="username" name="username" placeholder="Digite seu nome completo" required>
             </div>
             <div class="form-group">
                 <label for="email">E-mail <span>*</span></label>
@@ -107,13 +103,14 @@
             </div>
             <div class="form-group">
                 <label for="senha">Senha <span>*</span></label>
-                <input type="password" id="senha" name="senha" placeholder="Mínimo de 6 caracteres" required>
+                <input type="password" id="password1" name="password1" placeholder="Mínimo de 6 caracteres" required>
             </div>
             <div class="form-group">
                 <label for="confirmar_senha">Confirmar Senha <span>*</span></label>
-                <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirme sua senha" required>
+                <input type="password" id="password2" name="password2" placeholder="Confirme sua senha" required>
             </div>
             <button type="submit" class="submit-button">Cadastre-se</button>
+            <p>Já tem uma conta? <a href="{% url 'login' %}">Faça login aqui</a></p>
             <small>Todos os campos marcados com <span>*</span> são obrigatórios.</small>
         </form>
     </div>

@@ -1,48 +1,49 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate,  login as auth_login, logout
+from django.contrib.auth import authenticate,  login , logout
 from django.contrib import messages
-from .forms import UsuarioForm
-from .serilalizers import UsuarioSerializer
-from rest_framework import viewsets
-from .models import Usuario
+from .forms import CustomUserCreationForm
+from django.contrib.auth.models import User
+from django.views import  View
+from django.urls import reverse_lazy
+from blog.urls import logado
 # Create your views here.
 
-class UsuarioViewset(viewsets.ModelViewSet): #faz uma busca pelos dados do usuario e lista eles na API
-    queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
 
-
-def cadastro(request):
-    if request.method == 'POST':
-        form = UsuarioForm(request.POST)
+class SignUp(View):
+    def get(self, request):
+        form = CustomUserCreationForm()
+        return render(request, 'accounts/cadastro.html', {'form': form})
         
+    def post(self, request):
+        form = CustomUserCreationForm(request.POST)
+
         if form.is_valid():
-            # Aqui o form já é válido, então podemos criar e salvar o cliente
-            cliente = form.save(commit=False)  # Não salva imediatamente, ainda podemos manipular
-            cliente.set_password(form.cleaned_data['senha'])  # Define a senha criptografada
-            cliente.save()  # Agora sim, salva o cliente no banco de dados
-            
-            return redirect('login')  # Redireciona para uma página de listagem de clientes
-            # Cria a conta associada ao cliente
-        
+            print("Formulário válido, salvando usuário...")
+            user = form.save()
+            messages.success(request, 'Registro realizado com sucesso!', extra_tags='cadastro')
+            return redirect(reverse_lazy('login'))
         else:
-            print('Formulário inválido:', form.errors)  # Exibe erros para debug
+            print("Erros no formulário:", form.errors)  # <-- Mostra os erros no terminal
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}", extra_tags='cadastro')
 
-    else:
-        form = UsuarioForm()  # Cria um formulário vazio para GET
+        return render(request, 'accounts/cadastro.html', {'form': form})
 
-    return render(request, 'accounts/cadastro.html', {'form': form})
 
 def login_View(request):
     if request.method == 'POST':
-        usuario = request.POST['nome']
+        username = request.POST['username']
+        print("nome:",username)
         password = request.POST['password']
-        print(usuario)
-        user = authenticate(request, usuario=usuario, password=password)
+        print("senha:",password)
+        user = authenticate(request, username=username, password=password)
+        print(user)
         if user is not None:
             
-            auth_login(request, user)
-            return redirect('Home')
+            login(request, user)
+            
+            return redirect('blog:Home')
         else:
             messages.error(request, 'Usuário ou senha inválidos.')
             return render(request, 'accounts/login.html', {'nome':user})

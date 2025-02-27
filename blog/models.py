@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import Usuario
+from django.contrib.auth.models import User
 
 class Categoria(models.Model):
     nome_categoria = models.CharField(max_length=30, unique=True)
@@ -20,7 +20,7 @@ class Postagem(models.Model):
         ("R"," Rascunho"),
         ("P"," Postado "))
     
-    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     conteudo = models.TextField()
@@ -32,7 +32,7 @@ class Postagem(models.Model):
     data_publicação = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return self.titulo, self.autor
+        return self.titulo
     
 
 class Comentario(models.Model):
@@ -43,7 +43,7 @@ class Comentario(models.Model):
     )
     
     post = models.ForeignKey(Postagem, on_delete=models.CASCADE)
-    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
     conteudo = models.TextField()
     status = models.CharField(max_length=2, choices=STATUS_CHOICE_COMENTARIO)
     data_criacao = models.DateTimeField(auto_now_add=True)

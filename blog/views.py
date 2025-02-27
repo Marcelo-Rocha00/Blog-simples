@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+
+def Criar_Postagem(request):
+    if request.method == 'POST':
+        
