@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from .models import Postagem
 
 
-
-def Criar_Postagem(request):
-    if request.method == 'POST':
-        
+def pagina_princioal(request):
+    posts = Postagem.objects.all()
+    
+    return render(request, 'blog/redirecionamento.html', {'posts':posts})

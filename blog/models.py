@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .utils import resize_image
 
 class Categoria(models.Model):
     nome_categoria = models.CharField(max_length=30, unique=True)
@@ -24,12 +25,18 @@ class Postagem(models.Model):
     titulo = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     conteudo = models.TextField()
-    imagens = models.ImageField(blank=True)
+    imagens = models.ImageField(blank=True, upload_to='imagens/')
     Categorias = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, blank=True)
     status_postagem = models.CharField(max_length=1, choices=STATUS_CHOICE_POSTAGEM)
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_publicação = models.DateTimeField(auto_now=True)
+    
+    
+    def save(self, *args, **kwargs):
+        if self.imagens:
+            self.imagens = resize_image(self.imagens)  # Redimensiona a imagem antes de salvar
+        super().save(*args, **kwargs)   
     
     def __str__(self):
         return self.titulo

@@ -5,7 +5,7 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.models import User
 from django.views import  View
 from django.urls import reverse_lazy
-from blog.urls import logado
+from blog.urls import pagina_princioal
 # Create your views here.
 
 
