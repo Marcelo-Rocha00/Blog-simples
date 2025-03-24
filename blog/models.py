@@ -26,7 +26,7 @@ class Postagem(models.Model):
     slug = models.SlugField(unique=True)
     conteudo = models.TextField()
     imagens = models.ImageField(blank=True, upload_to='imagens/')
-    Categorias = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    categorias = models.ManyToManyField(Categoria, related_name="postagens")
     tags = models.ManyToManyField(Tag, blank=True)
     status_postagem = models.CharField(max_length=1, choices=STATUS_CHOICE_POSTAGEM)
     data_criacao = models.DateTimeField(auto_now_add=True)

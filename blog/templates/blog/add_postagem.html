@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criação de Postagem</title>
+</head>
+<body>
+    <div class="content">
+        <h1>Criar nova postagem</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" placeholder="Título da postagem" required><br>
+            
+            <label for="conteudo">Conteúdo:</label>
+            <textarea id="conteudo" name="conteudo" placeholder="Insira o conteúdo da postagem" rows="7" cols="50" required></textarea><br>
+            
+            <label for="categorias">Categoria(s):</label><br>
+            <select id="categorias" name="categorias" multiple>
+                {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                {% endfor %}
+            </select>
+            <p>(Segure CTRL ou CMD para selecionar várias categorias)</p>
+            
+            <label for="nova_categoria">Criar nova categoria:</label>
+            <input type="text" id="nova_categoria" name="nova_categoria" placeholder="Digite uma nova categoria"><br>
+
+            <label for="image">Insira a imagem que deseja postar:</label>
+            <input type="file" id="image" name="image" accept="image/*"><br>
+
+            <button type="submit">Publicar</button>
+        </form>
+    </div>
+</body>
+</html>
